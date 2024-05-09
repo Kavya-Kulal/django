@@ -1,0 +1,14 @@
+
+<head></head>
+
+<body>
+    <h1>Factorial Program</h1>
+    <form method="POST">
+    {% csrf_token %}
+    {{form.as_p}}    
+    <button type="submit">find factorial</button>
+    </form>
+    {% if param1 %}
+    <h2>Factorial of {{param2}} is {{param1}}</h2>
+    {% endif %}
+</body>
