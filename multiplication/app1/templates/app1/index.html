@@ -1,0 +1,18 @@
+
+<head></head>
+
+<body>
+    <h1>multiplication table</h1>
+    <form method="POST">
+    {% csrf_token %}
+    {{form.as_p}}    
+    <button type="submit">Generate table</button>
+    
+    </form>
+    
+    {% if param1 %}
+            {% for i in param1 %}
+                <h2>{{i}}</h2>     
+            {% endfor %}
+    {% endif %}
+</body>
