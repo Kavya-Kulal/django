@@ -88,10 +88,10 @@
     </header>
 
     <div class="button-container">
-        <a href="https://www.facebook.com" class="btn btn-facebook" target="_blank">
+        <a href="{% url 'app1:facebook_page' %}" class="btn btn-facebook" target="_blank">
             <i class="fab fa-facebook-f"></i>
          </a>
-         <a href="{% url 'app1:youtube' %}" class="btn btn-youtube" target="_blank">
+         <a href="{% url 'app1:youtube_page' %}" class="btn btn-youtube" target="_blank">
             <i class="fab fa-youtube"></i> 
         </a> 
         <a href="https://www.instagram.com" class="btn btn-instagram" target="_blank">

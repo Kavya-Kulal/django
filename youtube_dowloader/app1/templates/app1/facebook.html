@@ -4,13 +4,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Media Grabber - Youtube</title>
+    <title>Media Grabber - Facebook</title>
    <style>
     /* General Styling */
 body {
     margin: 0;
     font-family: 'Arial', sans-serif;
-    background: linear-gradient(to bottom, #9b1216, #1c0707);
+    background: linear-gradient(to bottom, #0f0f25, #1d1d3b);
     color: white;
     display: flex;
     justify-content: center;
@@ -20,7 +20,7 @@ body {
 
 /* Container for the form */
 .container {
-    background: rgba(196, 138, 138, 0.9);
+    background: rgba(20, 20, 40, 0.9);
     border-radius: 10px;
     padding: 40px;
     text-align: center;
@@ -31,14 +31,14 @@ body {
 /* Title */
 .container h1 {
     font-size: 36px;
-    color: #000001;
+    color: #B4A4FF;
     margin-bottom: 20px;
     letter-spacing: 1px;
 }
 
 .container h2 {
     font-size: 24px;
-    color: #090a17;
+    color: #999fff;
     margin-bottom: 30px;
 }
 
@@ -62,7 +62,7 @@ body {
     padding: 15px;
     border: none;
     border-radius: 30px;
-    background: linear-gradient(to right, #08182a, #030a11);
+    background: linear-gradient(to right, #4A90E2, #0078FF);
     color: white;
     font-size: 18px;
     cursor: pointer;
@@ -71,7 +71,7 @@ body {
 }
 
 .download-btn:hover {
-    background: linear-gradient(to right, #0a141f, #b8071f);
+    background: linear-gradient(to right, #0078FF, #4A90E2);
 }
 
 /* Facebook logo and video icon styling */
@@ -100,18 +100,18 @@ body {
    </style>
 </head>
 <body>
-    <form action="{% url 'app1:youtube' %}" method="POST"> 
+    <form action="{% url 'app1:facebook' %}" method="POST"> 
         {% csrf_token %} 
     <div class="container">
         <h1>Media Grabber</h1>
-        <h2>YouTube</h2>
+        <h2>Facebook</h2>
 
         <div class="logo-container">
             <div class="facebook-logo"></div>
             <div class="video-icon"></div>
         </div>
 
-        <input type="text" class="input-field" placeholder="Enter You Tube URL" name="url">
+        <input type="text" class="input-field" placeholder="Enter Facebook URL" name="url">
 
         <button class="download-btn" type="submit">Download Video</button>
     </div>
