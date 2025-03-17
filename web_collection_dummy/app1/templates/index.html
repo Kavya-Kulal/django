@@ -1,0 +1,96 @@
+<!-- <button id="addCollectionBtn">+</button>
+<input type="text" id="collectionInput" placeholder="Enter Collection Name" style="display: none;">
+<button id="saveCollectionBtn" style="display: none;">Save</button>
+
+<ul id="collectionList">
+    {% for collection in Collection %}
+        <li>{{ collection.name }}</li>
+    {% endfor %}
+</ul>
+
+<script>
+    document.getElementById("addCollectionBtn").addEventListener("click", function () {
+        document.getElementById("collectionInput").style.display = "inline";
+        document.getElementById("saveCollectionBtn").style.display = "inline";
+    });
+
+    document.getElementById("saveCollectionBtn").addEventListener("click", function () {
+        let name = document.getElementById("collectionInput").value;
+        if (name.trim() !== "") {
+            fetch("/insert/", {
+                method: "POST",
+                headers: { "Content-Type": "application/json", "X-CSRFToken": "{{ csrf_token }}" },
+                body: JSON.stringify({ name: name })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    let newItem = document.createElement("li");
+                    newItem.textContent = name;
+                    document.getElementById("collectionList").appendChild(newItem);
+                    document.getElementById("collectionInput").value = "";
+                }
+            });
+        }
+    });
+</script>
+ -->
+ <!DOCTYPE html>
+ <html lang="en">
+ <head>
+     <meta charset="UTF-8">
+     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+     <title>Collection Manager</title>
+ </head>
+ <body>
+     <h1>My Collections</h1>
+ 
+     <!-- Input Field to Add Collection -->
+     <input type="text" id="collectionInput" placeholder="Enter Collection Name">
+     <button id="saveCollectionBtn">+</button>
+ 
+     <!-- CSRF Token for Security -->
+     <input type="hidden" id="csrfToken" value="{{ csrf_token }}">
+ 
+     <!-- List of Collections -->
+     <ul id="collectionList">
+         {% for collection in collections %}
+             <li>{{ collection.name }}</li>
+         {% endfor %}
+     </ul>
+ 
+     <script>
+         document.getElementById("saveCollectionBtn").addEventListener("click", function () {
+             let name = document.getElementById("collectionInput").value;
+             let csrfToken = document.getElementById("csrfToken").value;
+ 
+             if (name.trim() !== "") {
+                 fetch("/insert/", {
+                     method: "POST",
+                     headers: { 
+                         "Content-Type": "application/json", 
+                         "X-CSRFToken": csrfToken 
+                     },
+                     body: JSON.stringify({ name: name })
+                 })
+                 .then(response => response.json())
+                 .then(data => {
+                     if (data.success) {
+                         // Append new collection to the list
+                         let newItem = document.createElement("li");
+                         newItem.textContent = name;
+                         document.getElementById("collectionList").appendChild(newItem);
+ 
+                         // Clear input field
+                         document.getElementById("collectionInput").value = "";
+                     } else {
+                         alert("Error saving collection!");
+                     }
+                 })
+                 .catch(error => console.error("Error:", error));
+             }
+         });
+     </script>
+ </body>
+ </html>
+ 

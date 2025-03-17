@@ -1,11 +1,20 @@
 # from django.shortcuts import render
-
-# # Create your views here.
-# from django.http import HttpResponse
-
+# from django.http import JsonResponse
+# from .models import Collection
+# import json
 
 # def home(request):
-#     return render(request, 'app1/index.html')
+#     collections = Collection.objects.all()  # Fetch existing collections
+#     return render(request, "index.html", {"collections": collections})
+
+# def insert_collection(request):
+#     if request.method == "POST":
+#         data = json.loads(request.body)  # Read JSON from request
+#         name = data.get("name")
+#         if name:
+#             Collection.objects.create(name=name)  # Insert into DB
+#             return JsonResponse({"success": True, "name": name})
+#     return JsonResponse({"success": False})
 from django.shortcuts import render
 from django.http import JsonResponse
 from .models import Collection

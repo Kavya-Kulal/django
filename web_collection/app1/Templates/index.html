@@ -9,6 +9,7 @@
         body {
             font-family: Arial, sans-serif;
             margin: 0;
+
             display: flex;
             height: 100vh;
             overflow: hidden;
@@ -200,7 +201,50 @@
                     <a href="#">Logout</a>
                 </div>
             </div>
-            <span class="add-button">+</span>
+
+
+
+
+
+
+            <button id="saveCollectionBtn"><span class="add-button">+</span></button>
+            
+ 
+     <!-- List of Collections -->
+     
+ 
+     <!-- <script>
+         document.getElementById("saveCollectionBtn").addEventListener("click", function () {
+             let name = document.getElementById("collectionInput").value;
+             let csrfToken = document.getElementById("csrfToken").value;
+ 
+             if (name.trim() !== "") {
+                 fetch("/insert/", {
+                     method: "POST",
+                     headers: { 
+                         "Content-Type": "application/json", 
+                         "X-CSRFToken": csrfToken 
+                     },
+                     body: JSON.stringify({ name: name })
+                 })
+                 .then(response => response.json())
+                 .then(data => {
+                     if (data.success) {
+                         // Append new collection to the list
+                         let newItem = document.createElement("li");
+                         newItem.textContent = name;
+                         document.getElementById("collectionList").appendChild(newItem);
+ 
+                         // Clear input field
+                         document.getElementById("collectionInput").value = "";
+                     } else {
+                         alert("Error saving collection!");
+                     }
+                 })
+                 .catch(error => console.error("Error:", error));
+             }
+         }); -->
+     <!-- </script> -->
         </div>
         <div class="menu-item">
             <span>All bookmarks</span>
@@ -217,9 +261,20 @@
                 <a href="#">Open unsorted</a>
             </div>
         </div>
-        
+        <h3>collections</h3>
+        <input type="text" id="collectionInput" placeholder="Enter Collection Name">
+     
+   
+     
+     <input type="hidden" id="csrfToken" value="{{ csrf_token }}">
+    
+    <ul id="collectionList">
+        {% for collection in collections %}
+            <li>{{ collection.name }}</li>
+        {% endfor %}
+    </ul>
     </div>
-
+ 
     <script>
         function toggleDropdown(event) {
     event.stopPropagation();
@@ -292,6 +347,46 @@
                 menu.style.display = "none";
             });
         });
+
+
+
+
+
+
+
+
+        
+         document.getElementById("saveCollectionBtn").addEventListener("click", function () {
+             let name = document.getElementById("collectionInput").value;
+             let csrfToken = document.getElementById("csrfToken").value;
+ 
+             if (name.trim() !== "") {
+                 fetch("/insert/", {
+                     method: "POST",
+                     headers: { 
+                         "Content-Type": "application/json", 
+                         "X-CSRFToken": csrfToken 
+                     },
+                     body: JSON.stringify({ name: name })
+                 })
+                 .then(response => response.json())
+                 .then(data => {
+                     if (data.success) {
+                         // Append new collection to the list
+                         let newItem = document.createElement("li");
+                         newItem.textContent = name;
+                         document.getElementById("collectionList").appendChild(newItem);
+ 
+                         // Clear input field
+                         document.getElementById("collectionInput").value = "";
+                     } else {
+                         alert("Error saving collection!");
+                     }
+                 })
+                 .catch(error => console.error("Error:", error));
+             }
+         });
+    
     </script>
 </body>
 </html>
