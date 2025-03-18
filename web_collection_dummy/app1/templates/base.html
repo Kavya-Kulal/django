@@ -35,7 +35,7 @@
     });
 </script>
  -->
- <!DOCTYPE html>
+ <!-- <!DOCTYPE html>
  <html lang="en">
  <head>
      <meta charset="UTF-8">
@@ -46,20 +46,20 @@
      <h1>My Collections</h1>
  
      <!-- Input Field to Add Collection -->
-     <input type="text" id="collectionInput" placeholder="Enter Collection Name">
+     <!-- <input type="text" id="collectionInput" placeholder="Enter Collection Name">
      <button id="saveCollectionBtn">+</button>
  
      <!-- CSRF Token for Security -->
      <input type="hidden" id="csrfToken" value="{{ csrf_token }}">
  
      <!-- List of Collections -->
-     <ul id="collectionList">
+     <!-- <ul id="collectionList">
          {% for collection in collections %}
              <li>{{ collection.name }}</li>
          {% endfor %}
      </ul>
- 
-     <script>
+  -->
+     <!-- <script>
          document.getElementById("saveCollectionBtn").addEventListener("click", function () {
              let name = document.getElementById("collectionInput").value;
              let csrfToken = document.getElementById("csrfToken").value;
@@ -91,6 +91,72 @@
              }
          });
      </script>
+ </body>
+ </html> -->
+ <!DOCTYPE html>
+ <html lang="en">
+ <head>
+     <meta charset="UTF-8">
+     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+     <title>{% block title %}Raindrop.io Clone{% endblock %}</title>
+     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+     <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+     <style>
+         body {
+             display: flex;
+         }
+         #sidebar {
+             width: 250px;
+             height: 100vh;
+             background: #f8f9fa;
+             padding: 15px;
+             position: fixed;
+             left: 0;
+             top: 0;
+             overflow-y: auto;
+         }
+         #content {
+             margin-left: 260px;
+             padding: 20px;
+             width: 100%;
+         }
+         .sidebar-item {
+             display: flex;
+             align-items: center;
+             padding: 10px;
+             text-decoration: none;
+             color: black;
+             border-radius: 5px;
+             transition: 0.3s;
+         }
+         .sidebar-item:hover {
+             background: #e2e6ea;
+         }
+         .sidebar-item i {
+             margin-right: 10px;
+         }
+     </style>
+ </head>
+ <body>
+ 
+     <!-- Sidebar -->
+     <div id="sidebar">
+         <h4>Raindrop Clone</h4>
+         <a href="{% url 'all_bookmarks' %}" class="sidebar-item"><i class="fas fa-bookmark"></i> All Bookmarks</a>
+         <a href="{% url 'unsorted' %}" class="sidebar-item"><i class="fas fa-inbox"></i> Unsorted</a>
+         <h6 class="mt-3">Collections</h6>
+         {% for collection in collections %}
+             <a href="{% url 'collection_detail' collection.id %}" class="sidebar-item">
+                 <i class="fas fa-folder"></i> {{ collection.name }}
+             </a>
+         {% endfor %}
+     </div>
+ 
+     <!-- Main Content -->
+     <div id="content">
+         {% block content %}{% endblock %}
+     </div>
+ 
  </body>
  </html>
  

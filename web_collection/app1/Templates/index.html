@@ -1,11 +1,11 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Resizable Sidebar</title>
+    <title>Web Collection</title>
     <style>
+
         body {
             font-family: Arial, sans-serif;
             margin: 0;
@@ -183,9 +183,87 @@
         .menu-dropdown a:hover {
             background-color: #f4f4f4;
         }
+        #inputBox {
+            display: none; /* Initially hidden */
+        }
+        #showInputBtn {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer; /* Hand cursor */
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
 
+        /* Button Hover Effect */
+        #showInputBtn:hover {
+            background-color: grey; /* Change to grey */
+        }
+
+        /* Input Box Styling */
+        #inputBox {
+            display: none; /* Initially hidden */
+            margin-top: 10px;
+            padding: 8px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        #menuButton {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        /* Dropdown Menu Styling */
+        .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+
+        .drop_down_for_collection {
+            display: none;
+            position: absolute;
+            background-color: white;
+            min-width: 180px;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
+            border-radius: 5px;
+            padding: 5px 0;
+        }
+
+        .drop_down_for_collection a {
+            display: block;
+            padding: 10px;
+            text-decoration: none;
+            color: black;
+            font-size: 14px;
+        }
+
+        .drop_down_for_collection a:hover {
+            background-color: #f1f1f1;
+        }
+        #collectionsList {
+    list-style-type: none; /* Removes bullets */
+    padding: 0;
+}
+
+#collectionsList li {
+    display: flex;
+    align-items: center;
+    gap: 8px; /* Adds space between icon and text */
+    padding: 5px 0;
+}
+        
 
     </style>
+     
+
 </head>
 <body>
     <div class="sidebar" id="sidebar">
@@ -206,45 +284,10 @@
 
 
 
-
-            <button id="saveCollectionBtn"><span class="add-button">+</span></button>
+            <span><div role="button" id="showInputBtn"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus-lg" viewBox="0 0 16 16">
+                <path fill-rule="evenodd" d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2"/>
+            </svg></div></span>
             
- 
-     <!-- List of Collections -->
-     
- 
-     <!-- <script>
-         document.getElementById("saveCollectionBtn").addEventListener("click", function () {
-             let name = document.getElementById("collectionInput").value;
-             let csrfToken = document.getElementById("csrfToken").value;
- 
-             if (name.trim() !== "") {
-                 fetch("/insert/", {
-                     method: "POST",
-                     headers: { 
-                         "Content-Type": "application/json", 
-                         "X-CSRFToken": csrfToken 
-                     },
-                     body: JSON.stringify({ name: name })
-                 })
-                 .then(response => response.json())
-                 .then(data => {
-                     if (data.success) {
-                         // Append new collection to the list
-                         let newItem = document.createElement("li");
-                         newItem.textContent = name;
-                         document.getElementById("collectionList").appendChild(newItem);
- 
-                         // Clear input field
-                         document.getElementById("collectionInput").value = "";
-                     } else {
-                         alert("Error saving collection!");
-                     }
-                 })
-                 .catch(error => console.error("Error:", error));
-             }
-         }); -->
-     <!-- </script> -->
         </div>
         <div class="menu-item">
             <span>All bookmarks</span>
@@ -261,22 +304,41 @@
                 <a href="#">Open unsorted</a>
             </div>
         </div>
-        <h3>collections</h3>
-        <input type="text" id="collectionInput" placeholder="Enter Collection Name">
-     
-   
-     
-     <input type="hidden" id="csrfToken" value="{{ csrf_token }}">
+
+        <div class="menu-item">
+            <span>Collections</span>
+            <span class="menu-icon" id="menuButton">⋮</span>
+        </div>
+        
+        
+        <input type="text" id="inputBox" placeholder="Enter collection name and press Enter">
+        <ul id="collectionsList"></ul>
+        
+        
+
+        
     
-    <ul id="collectionList">
-        {% for collection in collections %}
-            <li>{{ collection.name }}</li>
-        {% endfor %}
-    </ul>
     </div>
+
  
-    <script>
-        function toggleDropdown(event) {
+    
+<div class="dropdown">
+    
+    <div class="drop_down_for_collection" id="drop_down_for_collection">
+        <a href="#">Open all bookmarks</a>
+        <a href="#">Create nested collection</a>
+        <a href="#">Select</a>
+        <a href="#">Rename</a>
+        <a href="#">Change icon</a>
+        <a href="#">Share</a>
+        <a href="#">Delete</a>
+    </div>
+</div>
+
+</body>
+<script>
+        function toggleDropdown(event) 
+        {
     event.stopPropagation();
     var menu = document.getElementById('dropdownMenu');
     menu.style.display = (menu.style.display === 'block') ? 'none' : 'block';
@@ -347,47 +409,88 @@
                 menu.style.display = "none";
             });
         });
+        
 
 
+        
+        document.getElementById("showInputBtn").addEventListener("click", function() {
+            var inputBox = document.getElementById("inputBox");
+            if (inputBox.style.display === "none") {
+                inputBox.style.display = "block";
+            } else {
+                inputBox.style.display = "none";
+            }
+            showInputBtn.addEventListener("click", function () {
+                inputBox.style.display = "block";
+                inputBox.focus();
+             // Once shown, it will not hide again
+             
+            });
+            
+            inputBox.addEventListener("blur", function () {
+                if (inputBox.value.trim() === "") { 
+                    inputBox.style.display = "none";
+                }
+            });
+        });
+       
+        document.addEventListener("DOMContentLoaded", function () {
+            var menuButton = document.getElementById("menuButton");
+            var dropdownMenu = document.getElementById("drop_down_for_collection");
 
+            menuButton.addEventListener("click", function () {
+                dropdownMenu.style.display = dropdownMenu.style.display === "block" ? "none" : "block";
+            });
 
+            // Close menu if clicking outside
+            document.addEventListener("click", function (event) {
+                if (!menuButton.contains(event.target) && !dropdownMenu.contains(event.target)) {
+                    dropdownMenu.style.display = "none";
+                }
+            });
+        });
+    
 
+        
+        document.getElementById("inputBox").addEventListener("keypress", function(event) {
+    if (event.key === "Enter") {
+        event.preventDefault();
+        let collectionName = this.value.trim();
+        if (collectionName) {
+            fetch("{% url 'create_collection' %}", {
+                method: "POST",
+                headers: {
+                    "X-CSRFToken": "{{ csrf_token }}",
+                    "Content-Type": "application/x-www-form-urlencoded"
+                },
+                body: new URLSearchParams({
+                    name: collectionName
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    let newItem = document.createElement("li");
+                    newItem.innerHTML = `
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-folder2" viewBox="0 0 16 16">
+                            <path d="M1 3.5A1.5 1.5 0 0 1 2.5 2h2.764c.958 0 1.76.56 2.311 1.184C7.985 3.648 8.48 4 9 4h4.5A1.5 1.5 0 0 1 15 5.5v7a1.5 1.5 0 0 1-1.5 1.5h-11A1.5 1.5 0 0 1 1 12.5zM2.5 3a.5.5 0 0 0-.5.5V6h12v-.5a.5.5 0 0 0-.5-.5H9c-.964 0-1.71-.629-2.174-1.154C6.374 3.334 5.82 3 5.264 3zM14 7H2v5.5a.5.5 0 0 0 .5.5h11a.5.5 0 0 0 .5-.5z"/>
+                        </svg> 
+                        ${data.name}
+                    `;
+                    document.getElementById("collectionsList").appendChild(newItem);
+                } else {
+                    alert("Error creating collection.");
+                }
+            });
+
+            this.value = "";
+        }
+    }
+});
 
 
 
         
-         document.getElementById("saveCollectionBtn").addEventListener("click", function () {
-             let name = document.getElementById("collectionInput").value;
-             let csrfToken = document.getElementById("csrfToken").value;
- 
-             if (name.trim() !== "") {
-                 fetch("/insert/", {
-                     method: "POST",
-                     headers: { 
-                         "Content-Type": "application/json", 
-                         "X-CSRFToken": csrfToken 
-                     },
-                     body: JSON.stringify({ name: name })
-                 })
-                 .then(response => response.json())
-                 .then(data => {
-                     if (data.success) {
-                         // Append new collection to the list
-                         let newItem = document.createElement("li");
-                         newItem.textContent = name;
-                         document.getElementById("collectionList").appendChild(newItem);
- 
-                         // Clear input field
-                         document.getElementById("collectionInput").value = "";
-                     } else {
-                         alert("Error saving collection!");
-                     }
-                 })
-                 .catch(error => console.error("Error:", error));
-             }
-         });
-    
-    </script>
-</body>
-</html>
 
+</script>
+</html>

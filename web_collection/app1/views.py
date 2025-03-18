@@ -1,32 +1,23 @@
-# from django.shortcuts import render
-
-# # Create your views here.
-# from django.http import HttpResponse
-
-
-# def home(request):
-#     return render(request, 'app1/index.html')
 from django.shortcuts import render
 from django.http import JsonResponse
+from django.shortcuts import render
 from .models import Collection
-import json
 
+# Create your views here.
 def home(request):
-    collections = Collection.objects.all()  # Fetch saved collections
-    return render(request, "index.html", {"collections": collections})
 
-def insert_collection(request):
+    return render(request, "index.html")
+
+
+def create_collection(request):
     if request.method == "POST":
-        try:
-            data = json.loads(request.body.decode("utf-8"))
-            name = data.get("name")
+        name = request.POST.get("name")
+        parent_id = request.POST.get("parent_id", None)
 
-            if name:
-                new_collection = Collection.objects.create(name=name)
-                return JsonResponse({"success": True, "name": new_collection.name})
-            else:
-                return JsonResponse({"success": False, "error": "No name provided!"})
-        except Exception as e:
-            return JsonResponse({"success": False, "error": str(e)})
+        if name:
+            parent = Collection.objects.filter(id=parent_id).first() if parent_id else None
+            collection, created = Collection.objects.get_or_create(name=name, parent=parent)
 
-    return JsonResponse({"success": False, "error": "Invalid request!"})
+            return JsonResponse({"success": True, "id": collection.id, "name": collection.name, "parent_id": parent_id})
+    
+    return JsonResponse({"success": False, "error": "Invalid request"})
