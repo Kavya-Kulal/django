@@ -1,0 +1,375 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+
+    display: flex;
+    height: 100vh;
+    overflow: hidden;
+}
+
+
+.sidebar {
+width: 250px;
+background: #f4f4f4;
+display: flex;
+flex-direction: column;
+padding: 20px;
+position: relative;
+min-width: 100px;
+max-width: 400px;
+transition: width 0.2s ease;
+white-space: nowrap;
+overflow-y: auto; /* Enables vertical scrolling */
+max-height: 100vh; /* Ensures the sidebar does not exceed the viewport height */
+
+/* Ensure scrollbar stays inside */
+box-sizing: border-box; 
+}
+
+.sidebar::-webkit-scrollbar {
+width: 8px; /* Adjust scrollbar width */
+}
+
+.sidebar::-webkit-scrollbar-thumb {
+background: #888; /* Scrollbar color */
+border-radius: 4px;
+}
+
+.sidebar::-webkit-scrollbar-thumb:hover {
+background: #555; /* Scrollbar color on hover */
+}
+
+
+
+.resizer {
+    width: 5px;
+    background: #ccc;
+    cursor: ew-resize;
+    position: absolute;
+    top: 0;
+    right: 0;
+    height: 100%;
+}
+
+.profile-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-radius: 5px;
+    padding: 8px;
+    overflow: hidden;
+    position: relative;
+}
+
+.user-section {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    overflow: hidden;
+    cursor: pointer;
+    padding: 5px;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+    position: relative;
+}
+
+.user-section:hover {
+    background-color: #ccc;
+}
+
+.user-icon {
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.username {
+    font-size: 14px;
+    color: #333;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 120px;
+    white-space: nowrap;
+    transition: max-width 0.2s ease;
+}
+
+.add-button {
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+    padding: 5px;
+    background-color: #eee;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.3s;
+}
+
+.add-button:hover {
+    background-color: #ddd;
+}
+
+
+body, .sidebar, .user-section, .add-button 
+{
+ user-select: none;
+}
+
+
+.dropdown-content 
+{
+display: none;
+background-color: white;
+box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+padding: 10px;
+position: fixed;  /* Change from absolute to fixed */
+left: 20px; /* Adjusted positioning */
+top: 50px; /* Adjusted positioning */
+width: 150px;
+border-radius: 5px;
+z-index: 10; /* Increase z-index to bring it above other elements */
+border: 1px solid #ccc;
+}
+
+
+.dropdown-content a {
+    display: block;
+    text-decoration: none;
+    color: #333;
+    padding: 8px;
+    font-size: 14px;
+    transition: background-color 0.3s;
+}
+
+.dropdown-content a:hover {
+    background-color: #f4f4f4;
+}
+.menu-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+    font-size: 14px;
+    color: #333;
+    position: relative;
+}
+
+.menu-item:hover {
+    background-color: #eee;
+}
+
+.menu-icon {
+    font-weight: bold;
+    cursor: pointer;
+    padding: 5px;
+    transition: background-color 0.3s;
+}
+
+.menu-dropdown {
+    display: none;
+    background-color: white;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+    padding: 8px;
+    position: absolute;
+    right: 10px;
+    top: 35px;
+    width: 160px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    z-index: 10;
+}
+
+.menu-dropdown a {
+    display: block;
+    text-decoration: none;
+    color: #333;
+    padding: 8px;
+    font-size: 14px;
+    transition: background-color 0.3s;
+}
+
+.menu-dropdown a:hover {
+    background-color: #f4f4f4;
+}
+#inputBox {
+    display: none; /* Initially hidden */
+}
+#showInputBtn {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer; /* Hand cursor */
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+/* Button Hover Effect */
+#showInputBtn:hover {
+    background-color: grey; /* Change to grey */
+}
+
+/* Input Box Styling */
+#inputBox {
+    display: none; /* Initially hidden */
+    margin-top: 10px;
+    padding: 8px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+#menuButton {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+/* Dropdown Menu Styling */
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.drop_down_for_collection {
+    display: none;
+    position: absolute;
+    background-color: white;
+    min-width: 180px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
+    border-radius: 5px;
+    padding: 5px 0;
+}
+
+.drop_down_for_collection a {
+    display: block;
+    padding: 10px;
+    text-decoration: none;
+    color: black;
+    font-size: 14px;
+}
+
+.drop_down_for_collection a:hover {
+    background-color: #f1f1f1;
+}
+/* #collectionsList {
+list-style-type: none; /* Removes bullets */
+/* padding: 0;
+} */
+
+/* #collectionsList li {
+display: flex;
+align-items: center;
+gap: 8px; Adds space between icon and text
+padding: 5px 0;
+} */ */
+
+#collectionsContainer {
+margin-top: 10px;
+}
+
+.collection-item {
+display: flex;
+align-items: center;
+justify-content: space-between;
+padding: 10px;
+border: 1px solid #ccc;
+border-radius: 5px;
+margin-bottom: 5px;
+background-color: #f9f9f9;
+position: relative;
+}
+
+.collection-name {
+display: flex;
+align-items: center;
+gap: 5px;
+}
+
+.collection_menu {
+background: none;
+border: none;
+font-size: 16px;
+cursor: pointer;
+}
+
+/* .menu {
+display: none;
+position: absolute;
+right: 10px;
+top: 30px;
+background: white;
+border: 1px solid #ccc;
+padding: 5px;
+border-radius: 5px;
+box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.1);
+z-index: 100;
+} */
+
+.menu button {
+display: block;
+width: 100%;
+border: none;
+background: none;
+padding: 5px;
+text-align: left;
+cursor: pointer;
+}
+
+.menu button:hover {
+background: #eee;
+}
+
+
+
+
+
+/* .collection_menu {
+background: none;
+border: none;
+font-size: 18px;
+cursor: pointer;
+} */
+
+.menu_collection {
+display: none; /* Initially hidden */
+position: absolute;
+top: 100%;
+right: 0;
+background: white;
+border: 1px solid #ccc;
+box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+padding: 5px;
+z-index: 1000;
+}
+
+.menu_collection button {
+display: block;
+width: 100%;
+border: none;
+background: none;
+padding: 5px 10px;
+cursor: pointer;
+}
+
+.menu_collection button:hover {
+background: #f0f0f0;
+}
+.collection_dropdown2 {
+    background: white;
+    border: 1px solid #ddd;
+    padding: 8px;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+    display: none; /* Initially hidden */
+    min-width: 150px;
+}
+

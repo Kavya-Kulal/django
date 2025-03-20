@@ -6,7 +6,7 @@ from .models import Collection
 # Create your views here.
 def home(request):
 
-    return render(request, "index.html")
+    return render(request, "app1/index.html")
 
 
 def create_collection(request):
@@ -21,3 +21,9 @@ def create_collection(request):
             return JsonResponse({"success": True, "id": collection.id, "name": collection.name, "parent_id": parent_id})
     
     return JsonResponse({"success": False, "error": "Invalid request"})
+from django.http import JsonResponse
+from .models import Collection  # Ensure Collection model exists
+
+def get_collections(request):
+    collections = list(Collection.objects.values("name"))
+    return JsonResponse({"collections": collections})
