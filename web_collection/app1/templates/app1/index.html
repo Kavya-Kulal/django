@@ -73,7 +73,7 @@
             <div class="flex items-center justify-between p-3 border-b bg-white">
                 <div class="flex items-center space-x-2">
                     <input type="text" placeholder="Search" class="px-3 py-2 border rounded-lg focus:outline-none focus:ring">
-                    <button class="text-gray-500">🔗</button>
+                    
                 </div>
                 <div class="flex items-center space-x-4">
                    
@@ -83,35 +83,36 @@
             </div>
             
             <div class="p-4">
-                <span class="font-semibold text-lg">C1</span>
+                <span class="font-semibold text-lg"></span>
             </div>
     
             <!-- Add Bookmark Section -->
             <div class="fixed top-4 right-4">
                 <button onclick="showInput()" class="bg-blue-500 text-white px-4 py-2 rounded shadow text-sm w-full">+ Add ▼</button>
-                <div id="inputContainer" class="mt-2 bg-white p-4 rounded-lg shadow-md hidden w-80">
-                    <input id="bookmarkInput" type="url" class="border p-2 w-full rounded-lg" placeholder="Enter URL...">
+                <div id="sub_button" class="mt-2 bg-white p-4 rounded-lg shadow-md hidden w-80">
+                    <input id="url" type="url" class="border p-2 w-full rounded-lg" placeholder="Enter URL...">
                     <div class="mt-2 flex space-x-2">
-                        <button onclick="addBookmark()" class="bg-blue-500 text-white px-4 py-2 rounded">Submit</button>
+                        <button onclick="addBookmark()" class="bg-blue-500 text-white px-4 py-2 rounded" id="sub_button">Submit</button>
                         <button onclick="hideInput()" class="bg-gray-300 px-4 py-2 rounded">Cancel</button>
                     </div>
                 </div>
             </div>
             
             <!-- Empty State -->
-            <div class="mt-10 text-center text-gray-500" id="emptyState">
+            <!-- <div class="mt-10 text-center text-gray-500" id="emptyState">
                 <p class="text-lg font-semibold">No bookmarks</p>
                 <p class="text-sm">Add link or drop file here.</p>
                 <button class="mt-4 px-4 py-2 border rounded shadow text-sm">Import bookmarks</button>
             </div>
-            
+             -->
             <!-- Bookmark List -->
             <div id="bookmarkList" class="flex-1 mt-4 space-y-2 p-4 bg-white-100">
                 <!-- Bookmarks will be inserted here -->
             </div>
         </div>
     </div>`  
-        
+    
+
     
 </body>
 <script>
@@ -258,23 +259,29 @@ function fetchCollections() {
 
             // Add each collection to UI
             data.collections.forEach(collection => {
-                addCollectionToUI(collection.name);
+                addCollectionToUI(collection.collection_name, collection.collection_id)
+                
             });
         })
         .catch(error => console.error("Error fetching collections:", error));
 }
-function show_collection_name(collectionName) {
-    console.log("Clicked:", collectionName);
-    document.querySelector(".p-4 span").textContent = collectionName; // Update main page
-}
+
+
+
+
+
+
 
 // Function to add a new collection to the UI
-function addCollectionToUI(collectionName) {
+function addCollectionToUI(collectionName,collectionId) {
     let newDiv = document.createElement("div");
     newDiv.classList.add("collection-item");
 
     newDiv.innerHTML = `
-        <div class="collection-name" onclick="show_collection_name('${collectionName}')">
+        <div class="collection-name" onclick="show_collection_name('${collectionName}', '${collectionId}')">
+            <input type="hidden" id="selectedCollectionId" value="{{ csrf_token }}">
+        
+            <input type="hidden" id="selectedCollectionName" value="{{ csrf_token }}">
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-folder2" viewBox="0 0 16 16">
                 <path d="M1 3.5A1.5 1.5 0 0 1 2.5 2h2.764c.958 0 1.76.56 2.311 1.184C7.985 3.648 8.48 4 9 4h4.5A1.5 1.5 0 0 1 15 5.5v7a1.5 1.5 0 0 1-1.5 1.5h-11A1.5 1.5 0 0 1 1 12.5zM2.5 3a.5.5 0 0 0-.5.5V6h12v-.5a.5.5 0 0 0-.5-.5H9c-.964 0-1.71-.629-2.174-1.154C6.374 3.334 5.82 3 5.264 3zM14 7H2v5.5a.5.5 0 0 0 .5.5h11a.5.5 0 0 0 .5-.5z"/>
             </svg>
@@ -292,6 +299,10 @@ function addCollectionToUI(collectionName) {
     document.getElementById("collectionsContainer").appendChild(newDiv);
     
 }
+let selectedCollectionId = null;
+let selectedCollectionName='';
+
+
 
 
 // Handle Enter key to create a new collection
@@ -308,7 +319,7 @@ document.getElementById("inputBox").addEventListener("keypress", function(event)
                     "Content-Type": "application/x-www-form-urlencoded"
                 },
                 body: new URLSearchParams({
-                    name: collectionName
+                    collection_name: collectionName
                 })
             })
             .then(response => response.json())
@@ -331,30 +342,10 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 });
 
-// function show_menu(event, button) {
-//     console.log("show_menu triggered");
-//     event.stopPropagation(); // Prevents closing when clicking inside
-
-//     // Find the existing menu inside the button's parent
-//     let menu = button.parentElement.querySelector(".collection_dropdown2");
-
-//     if (!menu) {
-//         console.log("Menu not found!");
-//         return;
-//     }
-
-//     // Toggle visibility
-//     if (menu.style.display === "none" || menu.style.display === "") {
-//         closeAllMenus(); // Close any other open menus first
-//         menu.style.display = "block"; // Show menu
-//     } else {
-//         menu.style.display = "none"; // Hide menu
-//     }
-    
-// }
-
-// // Function to close all menus when clicking outside
-
+function getCSRFToken() {
+    let csrfInput = document.querySelector("input[name='csrfmiddlewaretoken']");
+    return csrfInput ? csrfInput.value : '';
+}
 function show_menu(event, button) {
     console.log("show_menu triggered");
     event.stopPropagation(); // Prevents closing when clicking inside
@@ -450,54 +441,210 @@ function show_menu(event, button) {
 
         
                 function showInput() {
-                    document.getElementById('inputContainer').classList.remove('hidden');
+                    document.getElementById('sub_button').classList.remove('hidden');
                     document.getElementById('bookmarkInput').focus();
                 }
         
                 function hideInput() {
-                    document.getElementById('inputContainer').classList.add('hidden');
+                    document.getElementById('sub_button').classList.add('hidden');
                     document.getElementById('bookmarkInput').value = '';
                 }
         
-                function addBookmark() {
-                    let input = document.getElementById('bookmarkInput');
-                    let url = input.value.trim();
+    //             function addBookmark()
+    //              {
+    //                 let input = document.getElementById('');
+    //                 let url = input.value.trim();
         
-                    if (url) {
-                        let bookmarkList = document.getElementById('bookmarkList');
-                        let newItem = document.createElement('div');
-                        newItem.innerHTML = `<a href="${url}" target="_blank" class="block p-2 border rounded-lg bg-gray-100">${url}</a>`;
-                        bookmarkList.appendChild(newItem);
+    //                 if (url) {
+    //                     let bookmarkList = document.getElementById('bookmarkList');
+    //                     let newItem = document.createElement('div');
+    //                     newItem.innerHTML = `<a href="${url}" target="_blank" class="block p-2 border rounded-lg bg-gray-100">${url}</a>`;
+    //                     bookmarkList.appendChild(newItem);
         
-                        // Hide input, clear value, hide empty state
-                        hideInput();
-                        document.getElementById('emptyState').classList.add('hidden');
-                    }
-                }
-                function showInput() {
-        document.getElementById("inputContainer").classList.remove("hidden");
-    }
+    //                     // Hide input, clear value, hide empty state
+    //                     hideInput();
+    //                     document.getElementById('emptyState').classList.add('hidden');
+    //                 }
+    //             }
+    //             function showInput() {
+    //     document.getElementById("sub_button").classList.remove("hidden");
+    // }
+    function show_collection_name(collectionName,collectionId) 
+    {
+    console.log("Clicked:", collectionName);
+    document.querySelector(".p-4 span").textContent = collectionName;
+    selectedCollectionId = collectionId; 
+    // Update main page
+    // Update main page
+    selectedCollectionName = collectionName; 
+    document.getElementById("selectedCollectionName").value = collectionName;
+    document.getElementById("selectedCollectionId").value = collectionId;
+    fetchBookmarks(selectedCollectionId);
+
+
     
-    function hideInput() {
-        document.getElementById("inputContainer").classList.add("hidden");
     }
-    
-    function addBookmark() {
-        var url = document.getElementById("bookmarkInput").value;
-        if (url.trim() === "") {
-            alert("Please enter a valid URL.");
+    function fetchBookmarks(collectionId) {
+    fetch(`/get_bookmarks/${collectionId}/`)
+    .then(response => response.json())
+    .then(data => {
+        let bookmarkList = document.getElementById("bookmarkList");
+        bookmarkList.innerHTML = ""; // Clear old bookmarks
+
+        if (data.bookmarks.length === 0) {
+            bookmarkList.innerHTML = "<p>No bookmarks found.</p>";
             return;
         }
-        
-        var bookmarkList = document.getElementById("bookmarkList");
-        var newBookmark = document.createElement("div");
-        newBookmark.className = "p-2 border rounded bg-gray-100";
-        newBookmark.innerHTML = `<a href="${url}" target="_blank" class="text-blue-500">${url}</a>`;
-        bookmarkList.appendChild(newBookmark);
-        
-        document.getElementById("bookmarkInput").value = "";
-        hideInput();
+
+        data.bookmarks.forEach(bookmark => {
+            let listItem = document.createElement("p");
+            listItem.textContent = bookmark.url_id;
+            bookmarkList.appendChild(listItem);
+        });
+    })
+    .catch(error => console.error("Error fetching bookmarks:", error));
+}
+
+function isValidURL(string) {
+    try {
+        new URL(string);
+        return true;
+    } catch (_) {
+        return false;
     }
+}
+
+
+
+
+
+
+
+//     function addBookmark() {
+
+        
+//     let url = document.getElementById('url').value.trim();
+//     console.log(url)
+//     if (!isValidURL(url))
+//     {
+//         alert("enter valid url")
+//         return;
+//     }
+    
+//     if (url) {
+//         // Get selected collection ID
+//         let collectionId =parseInt(document.getElementById("selectedCollectionId").value); // For hidden input method
+//         // let collectionId = selectedCollectionId; // Use this if using global variable method
+
+//         if (!collectionId) {
+//             console.error("No collection selected!");
+//             return;
+//         }
+
+//         console.log("Saving URL:", url, "to Collection ID:", collectionId);
+       
+
+//         // Send URL and collectionId to backend (Django API)
+//         fetch("{% url 'save_bookmark' %}", {
+//             method: "POST",
+//             headers: {
+//                 "Content-Type": "application/x-www-form-urlencoded",
+//                 "X-CSRFToken": getCSRFToken() // Ensure CSRF token is included
+//             },
+//             body: JSON.stringify({ url: url, collection_id: collectionId })
+//         })
+//         .then(response => response.json())
+//         .then(data => console.log("Bookmark saved:", data))
+//         .catch(error => console.error("Error saving bookmark:", error));
+//     }
+   
+
+// }
+// function addBookmark() {
+//     let url = document.getElementById('url').value.trim();
+//     if (!isValidURL(url)) {
+//         alert("Enter a valid URL");
+//         return;
+//     }
+
+//     let submitButton = document.getElementById("sub_button");
+//         submitButton.disabled = true; // Disable button to prevent multiple clicks
+
+//     let collectionId = parseInt(document.getElementById("selectedCollectionId").value);
+//     if (!collectionId) {
+//         console.error("No collection selected!");
+//         return;
+//     }
+
+//     fetch("{% url 'save_bookmark' %}", {
+//         method: "POST",
+//         headers: {
+//             "Content-Type": "application/json",
+//             "X-CSRFToken": getCSRFToken()
+//         },
+//         body: JSON.stringify({ url: url, collection_id: collectionId })
+//     })
+//     .then(response => response.json())
+//     .then(data => {
+//         console.log("Bookmark saved:", data);
+//         fetchBookmarks(collectionId); // ✅ Refresh bookmarks immediately
+//         submitButton.disabled = false; // Re-enable button after request completes
+//     })
+//     .catch(error => {
+//         console.error("Error saving bookmark:", error);
+//         submitButton.disabled = false;
+//     });
+// }
+
+function addBookmark() {
+    let url = document.getElementById('url').value.trim();
+    if (!isValidURL(url)) {
+        alert("Enter a valid URL");
+        return;
+    }
+
+
+    let submitButton = document.getElementById("sub_button");
+    console.log("Submit button:", submitButton)
+    submitButton.disabled = true; // Disable button to prevent multiple clicks
+
+    let collectionId = parseInt(document.getElementById("selectedCollectionId").value);
+    if (!collectionId) {
+        console.error("No collection selected!");
+        submitButton.disabled = false; // ✅ Re-enable button before exiting
+        return;
+    }
+
+    fetch("{% url 'save_bookmark' %}", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            "X-CSRFToken": getCSRFToken()
+        },
+        body: JSON.stringify({ url: url, collection_id: collectionId })
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log("Bookmark saved:", data);
+        fetchBookmarks(collectionId); // ✅ Refresh bookmarks immediately
+    })
+    .catch(error => {
+        console.error("Error saving bookmark:", error);
+    })
+    .finally(() => {
+        submitButton.disabled = false; // ✅ Ensure the button is always re-enabled
+    });
+}
+
+
+
+   
+    function hideInput() {
+        document.getElementById("sub_button").classList.add("hidden");
+    }
+   
+    
+   
     
     function toggleDropdown(event) {
         event.stopPropagation();

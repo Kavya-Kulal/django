@@ -83,7 +83,7 @@ WSGI_APPLICATION = 'web_collection.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'Collections',
+        'NAME': 'Web_Collection',
         'USER': 'postgres',
         'PASSWORD': 'Kavya@17',
         'HOST': 'localhost',  # or your database server
