@@ -1,7 +1,7 @@
-from django import forms
-from .models import Collection
+# from django import forms
+# from .models import Collection
 
-class CollectionForm(forms.ModelForm):
-    class Meta:
-        model = Collection
-        fields = ['name', 'parent']
+# class CollectionForm(forms.ModelForm):
+#     class Meta:
+#         model = Collection
+#         fields = ['name', 'parent']

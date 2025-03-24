@@ -8,9 +8,9 @@ body {
 }
 
 
-.sidebar {
-width: 250px;
-background: #f4f4f4;
+#sidebar {
+width: 400px;
+background: #adada8;
 display: flex;
 flex-direction: column;
 padding: 20px;
@@ -29,16 +29,16 @@ box-sizing: border-box;
     width: 200vh;
     height: 100vh;
 }
-.sidebar::-webkit-scrollbar {
+#sidebar::-webkit-scrollbar {
 width: 8px; /* Adjust scrollbar width */
 }
 
-.sidebar::-webkit-scrollbar-thumb {
+#sidebar::-webkit-scrollbar-thumb {
 background: #888; /* Scrollbar color */
 border-radius: 4px;
 }
 
-.sidebar::-webkit-scrollbar-thumb:hover {
+#sidebar::-webkit-scrollbar-thumb:hover {
 background: #555; /* Scrollbar color on hover */
 }
 
@@ -54,7 +54,7 @@ background: #555; /* Scrollbar color on hover */
     height: 100%;
 }
 
-.profile-container {
+.profile-container-add_collection {
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -129,11 +129,16 @@ box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
 padding: 10px;
 position: fixed;  /* Change from absolute to fixed */
 left: 20px; /* Adjusted positioning */
-top: 50px; /* Adjusted positioning */
+top: 120px; /* Adjusted positioning */
 width: 150px;
 border-radius: 5px;
 z-index: 10; /* Increase z-index to bring it above other elements */
 border: 1px solid #ccc;
+}
+#drop_down_for_user_section {
+    position: fixed; /* or absolute */
+    top: 120px;
+    left: 20px;
 }
 
 
@@ -402,4 +407,37 @@ background: #f0f0f0;
         z-index: 10;
     }
 
-        
+    #bookmarkList div{
+        display: flex;
+        flex-direction: row;
+        background-color: #f0f1e6d8;
+       
+        height: 5vh;
+        justify-content: space-around;
+        margin-block: 15px;
+        text-align: center;
+        top:50%
+
+
+
+    }
+   .menu-dropdown-collection
+   {
+    display: flex;
+    flex-direction: column;
+    background-color: white;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+    padding: 8px;
+    position: absolute;
+    right: 10px;
+    top: 35px;
+    width: 100px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    z-index: 10;
+   }
+    
+
+
+
+    

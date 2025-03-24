@@ -7,15 +7,14 @@ from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_protect
 from django.middleware.csrf import get_token
 import json
-from .models import Urls, Collection
+from .models import Url, Collection
+
 
 
 # Create your views here.
 def home(request):
 
     return render(request, "app1/index.html")
-
-
 
 
 def create_collection(request):
@@ -36,8 +35,6 @@ def create_collection(request):
 
 
 def get_collections(request):
-    
-    
     collections = list(Collection.objects.values("collection_id", "collection_name"))  # Include ID in response
     return JsonResponse({"collections": collections})
 
@@ -65,7 +62,7 @@ def save_bookmark(request):
             collection = Collection.objects.get(collection_id=collection_id)
 
             # Create and save the Urls object
-            Urls.objects.create(collection_id=collection, url_id=url)  # Assign Collection instance
+            Url.objects.create(collection_id=collection, url=url)  # Assign Collection instance
 
             return JsonResponse({"message": "Bookmark saved successfully"})
 
@@ -77,8 +74,51 @@ def save_bookmark(request):
     return JsonResponse({"error": "Invalid request method"}, status=400)
 
 def get_bookmarks(request,collection_id):
-    bookmark=Urls.objects.filter(collection_id=collection_id).values("url_id")
+    bookmark=Url.objects.filter(collection_id=collection_id).values("url")
     return JsonResponse({"bookmarks":list(bookmark)})
-    
-    
 
+@csrf_exempt  
+def delete_bookmark(request, url):
+    try:
+        delete_object = Url.objects.get(url=url)  # Get the object
+        delete_object.delete()  # Delete it
+        return JsonResponse({"success": True, "message": "URL deleted successfully"})
+    except Url.DoesNotExist:
+        return JsonResponse({"success": False, "error": "URL not found"})
+@csrf_exempt  
+def delete_collection(request, collection_id):
+    try:
+        delete_object = Collection.objects.get(collection_id=collection_id)  # Get the object
+        delete_object.delete()  # Delete it
+        return JsonResponse({"success": True, "message": "URL deleted successfully"})
+    except Url.DoesNotExist:
+        return JsonResponse({"success": False, "error": "URL not found"})
+
+    
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+import json
+
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+import json
+
+@csrf_exempt  # Only for testing, use CSRF properly in production
+def rename_collection(request, collection_id):
+    if request.method == "POST":
+        try:
+            data = json.loads(request.body)
+            new_name = data.get("new_name")
+
+            if not new_name:
+                return JsonResponse({"success": False, "error": "New name is required."})
+
+            # Find collection in database and rename
+            collection = Collection.objects.get(collection_id=collection_id)
+            collection.collection_name = new_name
+            collection.save()
+
+            return JsonResponse({"success": True})
+        except Exception as e:
+            return JsonResponse({"success": False, "error": str(e)})
+    return JsonResponse({"success": False, "error": "Invalid request"})
