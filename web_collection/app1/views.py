@@ -35,7 +35,7 @@ def create_collection(request):
 
 
 def get_collections(request):
-    collections = list(Collection.objects.values("collection_id", "collection_name"))  # Include ID in response
+    collections = list(Collection.objects.values("collection_id", "collection_name").order_by("created_at") ) # Include ID in response
     return JsonResponse({"collections": collections})
 
 @csrf_exempt

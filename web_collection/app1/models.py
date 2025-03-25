@@ -18,27 +18,6 @@ class Url(models.Model):
    
     def __str__(self):
         return self.url
-from django.http import JsonResponse
-from django.views.decorators.csrf import csrf_exempt
-import json
-from .models import Collection  # Assuming you have a Collection model
-
-@csrf_exempt
-def rename_collection(request, collection_id):
-    if request.method == "PUT":
-        try:
-            data = json.loads(request.body)
-            new_name = data.get("new_name")
-
-            # Fetch collection from DB and update the name
-            collection = Collection.objects.get(id=collection_id)
-            collection.collection_name = new_name
-            collection.save()
-
-            return JsonResponse({"success": True})
-        except Collection.DoesNotExist:
-            return JsonResponse({"success": False, "error": "Collection not found"})
-        except Exception as e:
-            return JsonResponse({"success": False, "error": str(e)})
     
-    return JsonResponse({"success": False, "error": "Invalid request"})
+ # Assuming you have a Collection model
+
